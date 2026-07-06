@@ -111,8 +111,31 @@ const confirmPaymentInDB = async (
   return result;
 };
 
+const getTenantPaymentHistory = async (tenantId: string) => {
+  const payments = await prisma.payment.findMany({
+    where: {
+      booking: {
+        tenantId,
+      },
+    },
+    include: {
+      booking: {
+        include: {
+          property: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  return payments;
+};
+
 export const PaymentServices = {
   createCheckoutSession,
   confirmPaymentInDB,
+  getTenantPaymentHistory,
   stripe,
 };

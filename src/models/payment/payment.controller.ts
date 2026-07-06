@@ -76,8 +76,21 @@ const confirmPayment = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getTenantPayments = catchAsync(async (req: Request, res: Response) => {
+  const tenantId = req.user?.id as string;
+  const result = await PaymentServices.getTenantPaymentHistory(tenantId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Payment history retrieved successfully!',
+    data: result,
+  });
+});
+
 export const PaymentControllers = {
   createCheckoutSession,
   confirmPayment,
   handleStripeWebhook,
+  getTenantPayments,
 };
