@@ -45,9 +45,7 @@ export const globalErrorHandler = (
 
   res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
     success: false,
-    statusCode: statusCode || httpStatus.INTERNAL_SERVER_ERROR,
-    name: errorName,
     message: errorMessage,
-    error: err.stack,
+    errorDetails: err,
   });
 };

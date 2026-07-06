@@ -2,8 +2,11 @@ import { Request, Response } from "express";
 
 export const notFound = (req: Request, res: Response) => {
   res.status(404).json({
-    message: "Route not found",
-    path: req.originalUrl,
-    data: new Date(),
+    success: false,
+    message: "API Not Found",
+    errorDetails: {
+      path: req.originalUrl,
+      message: "The requested route does not exist."
+    },
   });
 };
