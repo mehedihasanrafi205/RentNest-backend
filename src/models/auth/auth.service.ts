@@ -63,7 +63,7 @@ const loginUser = async (payload: any) => {
   const accessToken = jwtUtils.createToken(
     jwtPayload,
     config.jwt_access_secret as string,
-    { expiresIn: config.jwt_access_expires_in || '1d' } as any
+    (config.jwt_access_expires_in || '1d') as string
   );
 
   return {
