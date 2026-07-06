@@ -10,7 +10,7 @@ const stripe = new Stripe(config.stripe_secret_key as string, {
 /**
  * Creates a Stripe Checkout Session for an APPROVED booking.
  */
-const createCheckoutSession = async (bookingId: string, tenantId: string) => {
+const createCheckoutSession = async (bookingId: string, tenantId: string, email?: string) => {
   // 1. Verify booking exists and belongs to the tenant
   const booking = await prisma.booking.findUnique({
     where: { id: bookingId },
@@ -37,6 +37,7 @@ const createCheckoutSession = async (bookingId: string, tenantId: string) => {
   // 3. Create a Checkout Session
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
+    customer_email: email, // <-- Added email here
     line_items: [
       {
         price_data: {
@@ -52,8 +53,8 @@ const createCheckoutSession = async (bookingId: string, tenantId: string) => {
     ],
     mode: 'payment',
     // Using dummy success/cancel URLs since there's no real frontend
-    success_url: 'http://localhost:5000/api/payments/success',
-    cancel_url: 'http://localhost:5000/api/payments/cancel',
+    success_url: 'http://localhost:3000/api/payments/success',
+    cancel_url: 'http://localhost:3000/api/payments/cancel',
     metadata: {
       bookingId,
       tenantId,

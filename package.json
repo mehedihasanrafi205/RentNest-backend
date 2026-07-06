@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build": "tsup",
     "start": "node dist/server.js",
     "postinstall": "prisma generate",
     "stripe:webhook": "stripe listen --forward-to localhost:5000/api/payments/webhook",
@@ -38,6 +38,7 @@
     "@types/pg": "^8.20.0",
     "prisma": "^7.8.0",
     "ts-node-dev": "^2.0.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.23.0",
     "typescript": "^6.0.3"
   }

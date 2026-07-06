@@ -7,13 +7,14 @@ import config from '../../config';
 
 const createCheckoutSession = catchAsync(async (req: Request, res: Response) => {
   const tenantId = req.user?.id as string;
+  const email = (req.user as any)?.email; // Access email from JWT payload
   const { bookingId } = req.body;
 
   if (!bookingId) {
     throw new Error('Please provide bookingId in the request body.');
   }
 
-  const result = await PaymentServices.createCheckoutSession(bookingId, tenantId);
+  const result = await PaymentServices.createCheckoutSession(bookingId, tenantId, email);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -24,6 +25,7 @@ const createCheckoutSession = catchAsync(async (req: Request, res: Response) => 
 });
 
 const handleStripeWebhook = catchAsync(async (req: Request, res: Response) => {
+  console.log("Webhook hit!");
   const sig = req.headers['stripe-signature'] as string;
 
   let event;
@@ -34,7 +36,9 @@ const handleStripeWebhook = catchAsync(async (req: Request, res: Response) => {
       sig,
       config.stripe_webhook_secret as string
     );
+    console.log("Webhook verified successfully. Event type:", event.type);
   } catch (err: any) {
+    console.error(`Webhook Error: ${err.message}`);
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
