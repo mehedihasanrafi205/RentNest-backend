@@ -351,10 +351,43 @@
       ]
     },
     {
-      "name": "Users (Admin)",
+      "name": "Users",
       "item": [
         {
-          "name": "Get All Users",
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{tenant_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/me",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "users", "me" ]
+            }
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{tenant_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"email\": \"updated@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/update-me",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "users", "update-me" ]
+            }
+          }
+        },
+        {
+          "name": "Get All Users (Admin)",
           "request": {
             "method": "GET",
             "header": [
@@ -368,7 +401,7 @@
           }
         },
         {
-          "name": "Update User Status (Ban)",
+          "name": "Update User Status / Ban (Admin)",
           "request": {
             "method": "PATCH",
             "header": [
@@ -392,7 +425,7 @@
   "variable": [
     {
       "key": "base_url",
-      "value": "http://localhost:5000",
+      "value": "https://rent-nest-backend.vercel.app",
       "type": "string"
     },
     {
