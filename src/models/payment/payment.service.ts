@@ -40,7 +40,7 @@ const createCheckoutSession = async (bookingId: string, tenantId: string) => {
     line_items: [
       {
         price_data: {
-          currency: 'usd',
+          currency: 'bdt',
           product_data: {
             name: `RentNest Property Booking`,
             description: `Payment for booking ID: ${bookingId}`,
