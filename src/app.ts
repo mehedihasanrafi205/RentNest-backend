@@ -14,12 +14,21 @@ import { ReviewRoutes } from "./models/review/review.route";
 
 const app: Application = express();
 
+import { PaymentControllers } from "./models/payment/payment.controller";
+
 // Application Middlewares
 app.use(
   cors({
     origin: config.app_url,
     credentials: true,
   }),
+);
+
+// Stripe Webhook MUST be before express.json()
+app.post(
+  "/api/payments/webhook",
+  express.raw({ type: "application/json" }),
+  PaymentControllers.handleStripeWebhook
 );
 
 app.use(express.json());

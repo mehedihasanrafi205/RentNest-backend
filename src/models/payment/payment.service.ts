@@ -8,9 +8,9 @@ const stripe = new Stripe(config.stripe_secret_key as string, {
 });
 
 /**
- * Creates a Stripe Payment Intent for an APPROVED booking.
+ * Creates a Stripe Checkout Session for an APPROVED booking.
  */
-const createPaymentIntent = async (bookingId: string, tenantId: string) => {
+const createCheckoutSession = async (bookingId: string, tenantId: string) => {
   // 1. Verify booking exists and belongs to the tenant
   const booking = await prisma.booking.findUnique({
     where: { id: bookingId },
@@ -28,18 +28,32 @@ const createPaymentIntent = async (bookingId: string, tenantId: string) => {
     throw new Error('You can only pay for APPROVED bookings.');
   }
 
-  // 2. Calculate amount in cents (Stripe requires smallest currency unit)
-  // Assuming booking.totalCost is in USD or equivalent standard unit
   const amountInCents = Math.round(Number(booking.totalCost) * 100);
 
   if (amountInCents <= 0) {
     throw new Error('Invalid booking cost.');
   }
 
-  // 3. Create a PaymentIntent
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: amountInCents,
-    currency: 'usd',
+  // 3. Create a Checkout Session
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: `RentNest Property Booking`,
+            description: `Payment for booking ID: ${bookingId}`,
+          },
+          unit_amount: amountInCents,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    // Using dummy success/cancel URLs since there's no real frontend
+    success_url: 'http://localhost:5000/api/payments/success',
+    cancel_url: 'http://localhost:5000/api/payments/cancel',
     metadata: {
       bookingId,
       tenantId,
@@ -47,8 +61,7 @@ const createPaymentIntent = async (bookingId: string, tenantId: string) => {
   });
 
   return {
-    clientSecret: paymentIntent.client_secret,
-    transactionId: paymentIntent.id,
+    url: session.url,
   };
 };
 
@@ -98,6 +111,7 @@ const confirmPaymentInDB = async (
 };
 
 export const PaymentServices = {
-  createPaymentIntent,
+  createCheckoutSession,
   confirmPaymentInDB,
+  stripe,
 };

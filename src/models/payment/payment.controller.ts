@@ -3,8 +3,9 @@ import { catchAsync } from '../../utils/catchAsync';
 import { sendResponse } from '../../utils/sendResponse';
 import { PaymentServices } from './payment.service';
 import httpStatus from 'http-status';
+import config from '../../config';
 
-const createPaymentIntent = catchAsync(async (req: Request, res: Response) => {
+const createCheckoutSession = catchAsync(async (req: Request, res: Response) => {
   const tenantId = req.user?.id as string;
   const { bookingId } = req.body;
 
@@ -12,16 +13,47 @@ const createPaymentIntent = catchAsync(async (req: Request, res: Response) => {
     throw new Error('Please provide bookingId in the request body.');
   }
 
-  const result = await PaymentServices.createPaymentIntent(bookingId, tenantId);
+  const result = await PaymentServices.createCheckoutSession(bookingId, tenantId);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Payment intent created successfully!',
+    message: 'Checkout session created successfully!',
     data: result,
   });
 });
 
+const handleStripeWebhook = catchAsync(async (req: Request, res: Response) => {
+  const sig = req.headers['stripe-signature'] as string;
+
+  let event;
+
+  try {
+    event = PaymentServices.stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      config.stripe_webhook_secret as string
+    );
+  } catch (err: any) {
+    res.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+
+  // Handle the event
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as any;
+    const { bookingId, tenantId } = session.metadata;
+
+    if (bookingId && tenantId) {
+      await PaymentServices.confirmPaymentInDB(bookingId, session.id, tenantId);
+    }
+  }
+
+  // Return a 200 response to acknowledge receipt of the event
+  res.send();
+});
+
+// We keep confirmPayment just in case the frontend still calls it, but webhook is better.
 const confirmPayment = catchAsync(async (req: Request, res: Response) => {
   const tenantId = req.user?.id as string;
   const { bookingId, transactionId } = req.body;
@@ -41,6 +73,7 @@ const confirmPayment = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const PaymentControllers = {
-  createPaymentIntent,
+  createCheckoutSession,
   confirmPayment,
+  handleStripeWebhook,
 };

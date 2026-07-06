@@ -6,15 +6,9 @@ import { UserRole } from '../../generated/prisma/client';
 const router = express.Router();
 
 router.post(
-  '/create-intent',
+  '/create-checkout-session',
   auth(UserRole.TENANT),
-  PaymentControllers.createPaymentIntent
-);
-
-router.post(
-  '/confirm',
-  auth(UserRole.TENANT),
-  PaymentControllers.confirmPayment
+  PaymentControllers.createCheckoutSession
 );
 
 export const PaymentRoutes = router;
