@@ -55,7 +55,52 @@ const getTenantBookingsFromDB = async (tenantId: string) => {
   return result;
 };
 
+const getLandlordBookingsFromDB = async (landlordId: string) => {
+  const result = await prisma.booking.findMany({
+    where: {
+      property: {
+        landlordId: landlordId, 
+      },
+    },
+    include: {
+      property: true,
+      tenant: {
+        select: { id: true, name: true, email: true },
+      },
+    },
+  });
+  return result;
+};
+
+const updateBookingStatusInDB = async (
+  bookingId: string,
+  status: 'APPROVED' | 'REJECTED',
+  landlordId: string
+) => {
+  const bookingExists = await prisma.booking.findFirst({
+    where: {
+      id: bookingId,
+      property: {
+        landlordId: landlordId,
+      },
+    },
+  });
+
+  if (!bookingExists) {
+    throw new Error('Booking request not found or you are not authorized to update this listing!');
+  }
+
+  const result = await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status },
+  });
+  
+  return result;
+};
+
 export const BookingServices = {
   createBookingIntoDB,
   getTenantBookingsFromDB,
+  getLandlordBookingsFromDB,
+  updateBookingStatusInDB,
 };
