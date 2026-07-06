@@ -8,8 +8,8 @@ model Booking {
   updatedAt  DateTime      @updatedAt
 
   // Relations
-  tenant   User     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  tenant   User      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  property Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   payments Payment[]
 
   @@map("bookings")

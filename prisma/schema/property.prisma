@@ -6,12 +6,16 @@ model Property {
   price       Float
   status      PropertyStatus @default(AVAILABLE)
   landlordId  String
+  categoryId  String?
+  amenities   String[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
   // Relations
   landlord User      @relation(fields: [landlordId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   bookings Booking[]
+  reviews  Review[]
 
   @@map("properties")
 }
