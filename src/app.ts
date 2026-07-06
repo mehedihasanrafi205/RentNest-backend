@@ -6,6 +6,7 @@ import { notFound } from "./middlewares/notFound";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { AuthRoutes } from "./models/auth/auth.route";
 import { PropertyRoutes } from "./models/property/property.route";
+import { BookingRoutes } from "./models/booking/booking.route";
 
 const app: Application = express();
 
@@ -32,6 +33,7 @@ app.get("/", (req: Request, res: Response) => {
 // Endpoints Mappings
 app.use("/api/auth", AuthRoutes);
 app.use("/api/properties", PropertyRoutes);
+app.use("/api/bookings", BookingRoutes)
 
 app.use(globalErrorHandler);
 app.use(notFound);
