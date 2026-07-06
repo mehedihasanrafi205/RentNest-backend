@@ -15,7 +15,7 @@ const createPropertyIntoDB = async (
 };
 
 const getAllPropertiesFromDB = async (filters: TPropertyFilterRequest) => {
-  const { search, location, minPrice, maxPrice } = filters;
+  const { search, location, minPrice, maxPrice, categoryId, amenities } = filters;
 
   const whereConditions: any = { status: "AVAILABLE" };
 
@@ -34,6 +34,18 @@ const getAllPropertiesFromDB = async (filters: TPropertyFilterRequest) => {
     whereConditions.price = {};
     if (minPrice) whereConditions.price.gte = Number(minPrice);
     if (maxPrice) whereConditions.price.lte = Number(maxPrice);
+  }
+
+  if (categoryId) {
+    whereConditions.categoryId = categoryId;
+  }
+
+  if (amenities) {
+    // Expecting amenities as comma-separated string, e.g. "Wifi,Parking"
+    const amenitiesArray = amenities.split(',').map((a) => a.trim());
+    whereConditions.amenities = {
+      hasSome: amenitiesArray,
+    };
   }
 
   const result = await prisma.property.findMany({

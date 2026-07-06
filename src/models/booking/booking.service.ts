@@ -98,9 +98,25 @@ const updateBookingStatusInDB = async (
   return result;
 };
 
+const getAllBookingsFromDB = async () => {
+  const result = await prisma.booking.findMany({
+    include: {
+      property: true,
+      tenant: {
+        select: { id: true, name: true, email: true },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+  return result;
+};
+
 export const BookingServices = {
   createBookingIntoDB,
   getTenantBookingsFromDB,
   getLandlordBookingsFromDB,
   updateBookingStatusInDB,
+  getAllBookingsFromDB,
 };

@@ -14,4 +14,6 @@ export type TPropertyFilterRequest = {
   location?: string;
   minPrice?: string;
   maxPrice?: string;
+  categoryId?: string;
+  amenities?: string;
 };

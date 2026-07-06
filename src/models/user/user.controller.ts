@@ -28,7 +28,33 @@ const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserServices.getAllUsersFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Users retrieved successfully!',
+    data: result,
+  });
+});
+
+const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { isBanned } = req.body;
+  const result = await UserServices.updateUserStatusInDB(id, isBanned);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User status updated successfully!',
+    data: result,
+  });
+});
+
 export const UserControllers = {
   getMyProfile,
   updateMyProfile,
+  getAllUsers,
+  updateUserStatus,
 };

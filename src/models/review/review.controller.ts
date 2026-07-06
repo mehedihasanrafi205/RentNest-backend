@@ -18,7 +18,7 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
 
 const getReviewsForProperty = catchAsync(async (req: Request, res: Response) => {
   const { propertyId } = req.params;
-  const result = await ReviewServices.getReviewsForPropertyFromDB(propertyId);
+  const result = await ReviewServices.getReviewsForPropertyFromDB(propertyId as string);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
