@@ -41,7 +41,12 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 
 const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { isBanned } = req.body;
+  const isBanned = req.body?.isBanned;
+
+  if (isBanned === undefined) {
+    throw new Error('Please provide isBanned status in the request body (e.g., {"isBanned": true})');
+  }
+
   const result = await UserServices.updateUserStatusInDB(id, isBanned);
 
   sendResponse(res, {
