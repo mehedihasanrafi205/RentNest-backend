@@ -1,9 +1,8 @@
 {
   "info": {
-    "_postman_id": "65234bcd-a2ee-4b06-b85b-d89e6b3c3629",
-    "name": "RentNest-backend",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "45887971"
+    "name": "RentNest Backend API",
+    "description": "Complete API documentation for RentNest Property Rental Backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
@@ -12,252 +11,404 @@
         {
           "name": "Register",
           "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"tenant@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"TENANT\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "auth", "register" ]
+            },
+            "description": "Register a new user (Role can be TENANT, LANDLORD, or ADMIN)."
+          }
         },
         {
           "name": "Login",
           "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "User",
-      "item": [
-        {
-          "name": "get My Profile",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "update My Profile",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "Get All Users (Admin Only)",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "Ban a User (Admin Only)",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "properties",
-      "item": [
-        {
-          "name": "Create Property",
-          "request": {
             "method": "POST",
-            "header": [],
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"title\": \"Modern 3BHK Flat near Dhanmondi Lake\",\r\n  \"description\": \"Spacious apartment with standard master bed, 3 balconies and beautiful lake views.\",\r\n  \"location\": \"Dhanmondi, Dhaka\",\r\n  \"price\": 25000,\r\n  \"bedrooms\": 3,\r\n  \"bathrooms\": 3,\r\n  \"amenities\": [\"WiFi\", \"Lift\", \"Generator Backup\", \"CCTV Security\"]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
+              "raw": "{\n  \"email\": \"tenant@example.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "http://localhost:5000/api/properties/create-listing",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "5000",
-              "path": [
-                "api",
-                "properties",
-                "create-listing"
-              ]
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "auth", "login" ]
             }
-          },
-          "response": []
-        },
-        {
-          "name": "get all Properties",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "get Single Property",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
+          }
         }
       ]
     },
     {
-      "name": "booking",
+      "name": "Categories",
       "item": [
         {
-          "name": "Create Booking",
+          "name": "Create Category (Admin)",
           "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "my bookings",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "get Landlord Bookings",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "Update Booking Status",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "Get All Bookings (Admin Only)",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Category",
-      "item": [
-        {
-          "name": "Create a Category",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Apartment\",\n  \"description\": \"Full apartments for rent.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/categories",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "categories" ]
+            }
+          }
         },
         {
           "name": "Get All Categories",
           "request": {
             "method": "GET",
-            "header": []
-          },
-          "response": []
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categories",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "categories" ]
+            }
+          }
         },
         {
-          "name": "New Request",
+          "name": "Update Category (Admin)",
           "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Luxury Apartment\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/categories/category_id_here",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "categories", "category_id_here" ]
+            }
+          }
         },
         {
-          "name": "Delete a Category",
+          "name": "Delete Category (Admin)",
           "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/categories/category_id_here",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "categories", "category_id_here" ]
+            }
+          }
         }
       ]
     },
     {
-      "name": "Review",
+      "name": "Properties",
       "item": [
         {
-          "name": "Create review",
+          "name": "Create Listing (Landlord)",
           "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{landlord_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Beautiful 2BHK Apartment\",\n  \"description\": \"A very nice apartment with sea view.\",\n  \"location\": \"Dhaka\",\n  \"price\": 15000,\n  \"categoryId\": \"insert_category_id_here\",\n  \"amenities\": [\"WiFi\", \"Parking\", \"Gym\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/properties/create-listing",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "properties", "create-listing" ]
+            }
+          }
         },
         {
-          "name": "get Reviews For Property",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Payment",
-      "item": [
-        {
-          "name": "create checkout session",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
+          "name": "Get All Properties (With Filters)",
           "request": {
             "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": " {\"bookingId\": \"8c9f922b-24e7-4281-b646-e351cc4b1725\"}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
+            "url": {
+              "raw": "{{base_url}}/api/properties?location=Dhaka&minPrice=1000&maxPrice=50000",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "properties" ],
+              "query": [
+                { "key": "location", "value": "Dhaka" },
+                { "key": "minPrice", "value": "1000" },
+                { "key": "maxPrice", "value": "50000" },
+                { "key": "categoryId", "value": "", "disabled": true },
+                { "key": "amenities", "value": "WiFi,Gym", "disabled": true }
+              ]
             }
-          },
-          "response": []
+          }
         },
         {
-          "name": "my payments",
+          "name": "Get Single Property",
           "request": {
             "method": "GET",
-            "header": []
-          },
-          "response": []
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/properties/property_id_here",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "properties", "property_id_here" ]
+            }
+          }
         }
       ]
     },
     {
-      "name": "New Request",
-      "request": {
-        "method": "GET",
-        "header": []
-      },
-      "response": []
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Book Property (Tenant)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{tenant_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"propertyId\": \"insert_property_id_here\",\n  \"startDate\": \"2026-08-01T00:00:00Z\",\n  \"endDate\": \"2026-08-31T00:00:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/bookings/book-property",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "bookings", "book-property" ]
+            }
+          }
+        },
+        {
+          "name": "My Bookings (Tenant)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{tenant_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/bookings/my-bookings",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "bookings", "my-bookings" ]
+            }
+          }
+        },
+        {
+          "name": "Landlord Requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{landlord_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/bookings/landlord-requests",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "bookings", "landlord-requests" ]
+            }
+          }
+        },
+        {
+          "name": "Update Booking Status (Landlord)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{landlord_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/bookings/booking_id_here/update-status",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "bookings", "booking_id_here", "update-status" ]
+            },
+            "description": "Status can be APPROVED or REJECTED."
+          }
+        },
+        {
+          "name": "Get All Bookings (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/bookings",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "bookings" ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Create Checkout Session (Tenant)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{tenant_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingId\": \"insert_approved_booking_id_here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/create-checkout-session",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "payments", "create-checkout-session" ]
+            }
+          }
+        },
+        {
+          "name": "Confirm Payment (Manual/Alternative)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{tenant_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingId\": \"insert_approved_booking_id_here\",\n  \"transactionId\": \"tx_dummy_12345\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/payments/confirm",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "payments", "confirm" ]
+            }
+          }
+        },
+        {
+          "name": "My Payments (Tenant)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{tenant_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/payments/my-payments",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "payments", "my-payments" ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Create Review (Tenant)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{tenant_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"propertyId\": \"insert_property_id_here\",\n  \"rating\": 5,\n  \"comment\": \"Amazing place to stay!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reviews",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "reviews" ]
+            }
+          }
+        },
+        {
+          "name": "Get Property Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reviews/property_id_here",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "reviews", "property_id_here" ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users (Admin)",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "users" ]
+            }
+          }
+        },
+        {
+          "name": "Update User Status (Ban)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isBanned\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/user_id_here/status",
+              "host": [ "{{base_url}}" ],
+              "path": [ "api", "users", "user_id_here", "status" ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "tenant_token",
+      "value": "your_tenant_token_here",
+      "type": "string"
+    },
+    {
+      "key": "landlord_token",
+      "value": "your_landlord_token_here",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "your_admin_token_here",
+      "type": "string"
     }
   ]
 }
