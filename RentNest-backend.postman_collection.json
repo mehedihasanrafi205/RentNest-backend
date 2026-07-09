@@ -129,7 +129,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Beautiful 2BHK Apartment\",\n  \"description\": \"A very nice apartment with sea view.\",\n  \"location\": \"Dhaka\",\n  \"price\": 15000,\n  \"categoryId\": \"insert_category_id_here\",\n  \"amenities\": [\"WiFi\", \"Parking\", \"Gym\"]\n}"
+              "raw": "{\n  \"title\": \"Beautiful 2BHK Apartment\",\n  \"description\": \"A very nice apartment with sea view.\",\n  \"location\": \"Dhaka\",\n  \"price\": 15000,\n  \"categoryId\": \"insert_category_id_here\",\n  \"amenities\": [\"WiFi\", \"Parking\", \"Gym\"]\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/properties/create-listing",
@@ -184,7 +184,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"propertyId\": \"insert_property_id_here\",\n  \"startDate\": \"2026-08-01T00:00:00Z\",\n  \"endDate\": \"2026-08-31T00:00:00Z\"\n}"
+              "raw": "{\n  \"propertyId\": \"insert_property_id_here\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/bookings/book-property",
