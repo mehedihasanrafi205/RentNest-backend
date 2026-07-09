@@ -47,7 +47,7 @@ const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
     throw new Error('Please provide isBanned status in the request body (e.g., {"isBanned": true})');
   }
 
-  const result = await UserServices.updateUserStatusInDB(id, isBanned);
+  const result = await UserServices.updateUserStatusInDB(id as string, isBanned);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
